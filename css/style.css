@@ -1,0 +1,9 @@
+#fence1, #fence0 {
+    border: 2px solid black;
+    width : 300px;
+    height: 300px;
+}
+
+.dirty {
+    filter: blur(2px) sepia(30%);
+}
