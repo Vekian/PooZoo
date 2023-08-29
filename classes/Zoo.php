@@ -170,9 +170,9 @@
                 return $this;
         }
 
-        public function __construct (PDO $db){
+        public function __construct (PDO $db, $id){
             $this->setDb($db);
-            $this->hydrate($this->getZooData());
+            $this->hydrate($this->getZooData($id));
         }
 
         public function hydrate($data){
@@ -185,10 +185,10 @@
             $this->setTime($data['time']);
         }
 
-        public function getZooData() {
+        public function getZooData($id) {
             $query = $this->db->query('SELECT * FROM zoo 
                                         JOIN staff on zoo.id = staff.zoo_id
-                                        WHERE zoo.id = 1');
+                                        WHERE zoo.id = ' . $id);
             $zooData = $query->fetch(PDO::FETCH_ASSOC);
             return $zooData;
         }
@@ -201,6 +201,14 @@
                 array_push($fencesArray, new Fence($fenceData));
             }
             return $fencesArray;
+        }
+
+        public function getReserve(){
+                foreach($this->fences as $fence){
+                        if($fence->getType() == 'Reserve') {
+                                return $fence;
+                        }
+                }
         }
 
         public function getPokemonsData(){
@@ -318,7 +326,8 @@
         public function growPokemons($pokemons){
         foreach($pokemons as $pokemon){
                 $id = $pokemon->getId();
-                $health = $pokemon->checkHealth();
+                $reserve = $this->getReserve();
+                $health = $pokemon->checkHealth($reserve->getId());
                 $type = $pokemon->getNameSpecies();
                 $age = ($pokemon->getAge()) + 1;
                 if (($health <= 0) || ($age >= ($type::$lifeExpectancy + rand(0,5)))) {
@@ -327,23 +336,27 @@
                 }
                 else {
                 $pokemon = $this->employee->evolution($pokemon, $this);
-                if ($pokemon->getFenceId() != 1) {
+                if ($pokemon->getFenceId() != $reserve->getId()) {
                         $this->gainPopularity($type::$popularity);
                         if ($pokemon->getHeight() >= $type::$maxHeight){
                                 $this->gainPopularity(10);
                         }
-                        if ($pokemon->getSick() === true){
-                                $this->gainPopularity(-5);
-                        }
+                        if ($pokemon->getSleeping() === true){
+                        $this->gainPopularity(-5);
+                }
+                }
+                if ($pokemon->getSick() === true){
+                        $this->gainPopularity(-5);
                 }
                 $weight = $pokemon->gainWeight($pokemon->getNameSpecies());
                 $height = $pokemon->gainHeight($pokemon->getNameSpecies());
                 $pokemon->gainState();
                 $hungry = $this->convertBool($pokemon->getHungry());
                 $sleepy = $this->convertBool($pokemon->getSleepy());
+                $sleeping = $this->convertBool($pokemon->getSleeping());
                 $sick = $this->convertBool($pokemon->getSick());
                 $species_id = $pokemon->getSpeciesId();
-                $this->employee->updatePokemon($id, $age, $weight, $height, $health, $hungry, $sleepy, $sick, $species_id);
+                $this->employee->updatePokemon($id, $age, $weight, $height, $health, $hungry, $sleepy, $sleeping, $sick, $species_id);
                 }    
         }
         $money = $this->popularity;

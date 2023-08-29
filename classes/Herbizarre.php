@@ -1,20 +1,20 @@
 <?php
-    class Bulbizarre extends Pokemon {
+    class Herbizarre extends Pokemon {
         private int $speciesId;
         private string $nameSpecies;
         private string $diet;
         private string $firstType;
         private string $secondType;
         private string $avatar;
-        public static $minWeight = 2;
-        public static $minHeight = 12;
-        public static $maxWeight = 7;
-        public static $maxHeight = 70;
-        public static $lifeExpectancy = 10;
-        public static $ageEvolution = 5;
-        public static $idEvolution = 14;
-        public static $nameEvolution = 'Herbizarre';
-        public static $popularity = 10;
+        public static $minWeight = 8;
+        public static $minHeight = 70;
+        public static $maxWeight = 13;
+        public static $maxHeight = 100;
+        public static $lifeExpectancy = 15;
+        public static $ageEvolution = 10;
+        public static $idEvolution = 15;
+        public static $nameEvolution = 'Florizarre';
+        public static $popularity = 20;
         public static $babyId = 13;
     
         /**

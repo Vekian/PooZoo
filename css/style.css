@@ -1,9 +1,31 @@
-#fence1, #fence0 {
-    border: 2px solid black;
-    width : 300px;
-    height: 300px;
+@media screen and (max-width: 600px) {
+    #fence1, #fence0 {
+        border: 2px solid black;
+        width : 300px;
+        height: 300px;
+    }
+    
+    .dirty {
+        filter: blur(2px) sepia(30%);
+    }
+    
+    #logo {
+        height : 50px;
+    }
 }
 
-.dirty {
-    filter: blur(2px) sepia(30%);
+@media screen and (min-width: 601px) {
+    #fence1, #fence0 {
+        border: 2px solid black;
+        width : 300px;
+        height: 300px;
+    }
+    
+    .dirty {
+        filter: blur(2px) sepia(30%);
+    }
+    
+    #logo {
+        height : 80px;
+    }
 }

@@ -1,21 +1,21 @@
 <?php
-    class Bulbizarre extends Pokemon {
+    class Chenipan extends Pokemon {
         private int $speciesId;
         private string $nameSpecies;
         private string $diet;
         private string $firstType;
         private string $secondType;
         private string $avatar;
-        public static $minWeight = 2;
+        public static $minWeight = 1;
         public static $minHeight = 12;
-        public static $maxWeight = 7;
-        public static $maxHeight = 70;
+        public static $maxWeight = 3;
+        public static $maxHeight = 30;
         public static $lifeExpectancy = 10;
         public static $ageEvolution = 5;
-        public static $idEvolution = 14;
-        public static $nameEvolution = 'Herbizarre';
+        public static $idEvolution = 17;
+        public static $nameEvolution = 'Chrysacier';
         public static $popularity = 10;
-        public static $babyId = 13;
+        public static $babyId = 16;
     
         /**
          * Get the value of species_id

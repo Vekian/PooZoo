@@ -137,7 +137,7 @@ class Employee {
     }
     public function sleepPokemon($pokemon){
             if ($pokemon->getSleepy() === true){
-                $q = $this->db->prepare('UPDATE pokemons SET sleepy = 0 WHERE idPokemon = :id');
+                $q = $this->db->prepare('UPDATE pokemons SET sleepy = 0, sleeping = 1 WHERE idPokemon = :id');
                 $q->bindValue(':id', $pokemon->getId(), PDO::PARAM_INT);
                 $q->execute();
                 $pokemon->setSleepy(false);
@@ -172,7 +172,7 @@ class Employee {
         $query = $this->db->query('SELECT * FROM fences WHERE id = "' . $idFence .'"');
         $fenceData = $query->fetch(PDO :: FETCH_ASSOC);
         $fence = new Fence($fenceData);
-        echo('<div class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto" id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover;">');
+        echo('<div class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto" id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
         $fence->showRandomPokemons($pokemons);
         echo('</div>
             <div class="border col-lg-6 col-12 text-center d-flex flex-column justify-content-center">
@@ -232,7 +232,7 @@ class Employee {
         else {
             $sex = "male";
         }
-        $q = $this->db->prepare('INSERT INTO pokemons(age, sex, weight, height, health, hungry, sleepy, sick, species_id, fence_id) VALUES (:age, :sex, :weight, :height, :health, :hungry, :sleepy, :sick, :species_id, :fence_id)');
+        $q = $this->db->prepare('INSERT INTO pokemons(age, sex, weight, height, health, hungry, sleepy, sleeping, sick, species_id, fence_id) VALUES (:age, :sex, :weight, :height, :health, :hungry, :sleepy, :sleeping, :sick, :species_id, :fence_id)');
         $q->bindValue(':age', 0);
         $q->bindValue(':sex', $sex);
         $q->bindValue(':weight', $typeName::$minWeight);
@@ -240,6 +240,7 @@ class Employee {
         $q->bindValue(':health', 100);
         $q->bindValue(':hungry', 1);
         $q->bindValue(':sleepy', 1);
+        $q->bindValue(':sleeping', 0);
         $q->bindValue(':sick', 0);
         $q->bindValue(':species_id', $speciesId);
         $q->bindValue(':fence_id', $fenceId);
@@ -256,8 +257,8 @@ class Employee {
         $q->execute();
     }
 
-    public function updatePokemon($id, $age, $weight, $height, $health, $hungry, $sleepy, $sick, $species_id){
-        $q = $this->db->prepare('UPDATE pokemons SET age = :age, weight = :weight, height = :height, health = :health, hungry = :hungry, sleepy = :sleepy, sick = :sick, species_id = :species_id WHERE idPokemon = :id');
+    public function updatePokemon($id, $age, $weight, $height, $health, $hungry, $sleepy, $sleeping, $sick, $species_id){
+        $q = $this->db->prepare('UPDATE pokemons SET age = :age, weight = :weight, height = :height, health = :health, hungry = :hungry, sleepy = :sleepy, sleeping = :sleeping, sick = :sick, species_id = :species_id WHERE idPokemon = :id');
         $q->bindValue(':id', $id);
         $q->bindValue(':age', $age);
         $q->bindValue(':weight', $weight);
@@ -265,6 +266,7 @@ class Employee {
         $q->bindValue(':health', $health);
         $q->bindValue(':hungry', $hungry);
         $q->bindValue(':sleepy', $sleepy);
+        $q->bindValue(':sleeping', $sleeping);
         $q->bindValue(':sick', $sick);
         $q->bindValue(':species_id', $species_id);
         $q->execute();
@@ -313,6 +315,7 @@ class Employee {
         $type1 = $pokemon->getFirstType();
         $type2 = $pokemon->getSecondtype();
         $fenceTypes = Fence::$fenceTypes;
+        $fenceId = $pokemon->getFenceId();
         $parameters = "";
         $index= 0;
         foreach($fenceTypes as $fenceType) {
@@ -323,7 +326,7 @@ class Employee {
                         $parameters .= ' OR ';
                         $index++;
                     }
-                    $parameters .= 'type = "' . $fenceType . '"';
+                    $parameters .= 'type = "' . $fenceType . '"' . ' AND zoo_id = ' . $_SESSION['LOGGED_USER'];
                 }
             }
         }
@@ -332,7 +335,9 @@ class Employee {
         $fencesData = $query->fetchAll(PDO::FETCH_ASSOC);
         $fencesArray = [];
             foreach($fencesData as $fenceData) {
-                array_push($fencesArray, new Fence($fenceData));
+                if ($fenceData['id'] != $fenceId){
+                    array_push($fencesArray, new Fence($fenceData));
+                }
             }
             return $fencesArray;
     }
@@ -353,8 +358,8 @@ class Employee {
             $pokemon->setHeight($newType::$minHeight);
             $pokemon->setHealth(100);
             $pokemon->setSpeciesId($type::$idEvolution);
-            $this->updatePokemon($pokemon->getId(), $pokemon->getAge(), $pokemon->getWeight(), $pokemon->getHeight(), $pokemon->getHealth(), $this->convertBool($pokemon->getHungry()), $this->convertBool($pokemon->getSleepy()), $this->convertBool($pokemon->getSick()), $pokemon->getSpeciesId());
-           $pokemonZoo->gainPopularity(30);
+            $this->updatePokemon($pokemon->getId(), $pokemon->getAge(), $pokemon->getWeight(), $pokemon->getHeight(), $pokemon->getHealth(), $this->convertBool($pokemon->getHungry()), $this->convertBool($pokemon->getSleepy()), 0, $this->convertBool($pokemon->getSick()), $pokemon->getSpeciesId());
+            $pokemonZoo->gainPopularity(30);
             return $pokemon;
         }
         }

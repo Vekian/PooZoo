@@ -156,6 +156,27 @@
                 return $this;
         }
 
+        
+        /**
+         * Get the value of sleeping
+         */ 
+        public function getSleeping()
+        {
+                return $this->sleeping;
+        }
+
+        /**
+         * Set the value of sleeping
+         *
+         * @return  self
+         */ 
+        public function setSleeping($sleeping)
+        {
+                $this->sleeping = $sleeping;
+
+                return $this;
+        }
+
         /**
          * Get the value of sick
          */
@@ -197,6 +218,7 @@
                 $this->setHealth($data['health']);
                 $this->setHungry($data['hungry']);
                 $this->setSleepy($data['sleepy']);
+                $this->setSleeping($data['sleeping']);
                 $this->setSick($data['sick']);
                 $this->setFenceId($data['fence_id']);
         }
@@ -255,8 +277,7 @@
                                 <input type="hidden" value="'. $this->getId() .'" name="pokemonId">
                                 <label for="newFence" class="mt-1">Choisissez un enclos </label>
                                 <select name="newFenceId" id="newFence" required>');
-                                    echo('<option value="" selected disabled hidden>Choisir</option>
-                                    <option value="1">Réserve</option>');
+                                    echo('<option value="" selected disabled hidden>Choisir</option>');
                                     foreach($fences as $fence) {
                                         echo('<option value="'. $fence->getId() . '">' . $fence->getName() . '</option>');
                                         };
@@ -288,9 +309,18 @@
                         if ($this->getSick() === true) {
                                 $state .= ", est malade ";
                         }
+                        else if ($this->getSleeping() === true){
+                                $state .= ", dort";
+                        }
                 }
                 else if ($this->getSick() === true){
                         $state = $this->getNameSpecies() . " est malade";
+                        if ($this->getSleeping() === true){
+                                $state .= ", dort";
+                        }
+                }
+                else if ($this->getSleeping() === true){
+                        $state .= $this->getNameSpecies() . " dort";
                 }
                 else {
                         $state= $this->move($fenceId);
@@ -303,6 +333,9 @@
 
                 if ($this->getWeight() < $maxWeight) {
                 $gainWeight = $maxWeight * 0.3;
+                if ($gainWeight < 1) {
+                        $gainWeight = 1;
+                }
                         if ($this->getHungry() === true) {
                                 $this->setWeight(($this->getWeight()) + ($gainWeight * 0.3));
                         }
@@ -325,7 +358,7 @@
                 return $this->getHeight();
         }
 
-        public function checkHealth(){
+        public function checkHealth($reserveId){
                 $health = $this->getHealth();
                 if($this->getHungry() === true) {
                         $health -= 5;
@@ -333,7 +366,7 @@
                 if ($this->getSick() === true) {
                         $health -= (rand(10, 15));
                 }
-                if ($this->getFenceId() == 1){
+                if ($this->getFenceId() == $reserveId){
                         $health -= (rand(10, 20));
                 }
                 $this->setHealth($health);
@@ -350,7 +383,10 @@
                 if ($this->getSick() === false) {
                         $random = rand(0, 10);
                         if (($random > 6) && ($this->getHungry() === true)) {
-                                $this->setHungry(true);
+                                $this->setSick(true);
+                        }
+                        else if (($random > 5) && ($this->getSleepy() === true)) {
+                                $this->setSick(true);
                         }
                         else if ($random > 8) {
                                 $this->setSick(true);
@@ -362,6 +398,10 @@
                                 $this->setSleepy(true);
                         }
                 }
+                if ($this->getSleeping() === true) {
+                        $this->setSleeping(false);
+                }
         }
+
 }
 ?>
