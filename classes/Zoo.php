@@ -233,19 +233,19 @@
         $i=1;
             foreach ($this->fences as $fence) {
                 if($fence->getName() !== "Reserve") {
-                echo('<div class="card" style="width: 18rem;">');
+                echo('<div class="card m-3" style="width: 18rem;">');
                 echo('<img src="' . $fence->getBackground() . '" class="card-img-top" alt="'. $fence->getType() . '" height="200px">
                         <div class="card-body">
                                 <h5 class="card-title">'. $fence->getName() .'</h5>
                                 <p class="card-text">Contient : ' . $fence->getPopulation() . ' pokemons</p>
                                 <p class="card-text">L\'état de l\'enclos est : ' . $fence->getCleanliness() . '</p>
-                                <div class="d-flex">
+                                <div class="d-flex justify-content-center">
                                         <form action="fence.php" method="GET">
                                                 <input type="hidden" name="fenceId" value="' . $fence->getId() . '">
                                                 <input type="submit" value="Voir l\'enclos" class="btn btn-primary">
                                         </form>
                                         <button type="button" id="deleteFence'. $i . '" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteFenceModal'. $i .'">
-                                        Détruire l\'enclos
+                                        Détruire
                                         </button>
                                 </div>
                         </div>
@@ -373,7 +373,7 @@
         $pokemons = $this->getPokemonsData();
         $this->growPokemons($pokemons);
         $employee = $this->employee;
-        $employee->reproduce($pokemons);
+        $employee->reproduce($pokemons, $this->getReserve());
         }
 
         public function convertBool($bool) {

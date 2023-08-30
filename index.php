@@ -3,7 +3,7 @@
     if(isset($_SESSION['LOGGED_USER'])){ 
         $fences= $pokemonZoo->getFences();
 ?>
-    <main class="text-center">
+    <main class="text-center" id="infosFence">
         <h1>
             Bienvenue au <?php echo($pokemonZoo->getName()); ?> !
         </h1>
@@ -93,6 +93,7 @@
     }
     ?>
     </main>
+    
 <?php
     include_once('footer.php');
 ?>

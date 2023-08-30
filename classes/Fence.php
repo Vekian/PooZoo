@@ -154,7 +154,7 @@
                 $arrayOfPokemons= array_slice($pokemons, 0, 2);
                 foreach($arrayOfPokemons as $pokemonData){
                         $pokemonHeight = $pokemonData->getHeight() + 50;
-                        echo('<img src="' . $pokemonData->getAvatar() . '" height="'. $pokemonHeight .'px" class="mb-5">');
+                        echo('<img id="imgPokemonFence" src="' . $pokemonData->getAvatar() . '" height="'. $pokemonHeight .'px" class="mb-5">');
                     }
         }
 

@@ -12,6 +12,43 @@
     #logo {
         height : 50px;
     }
+    html, main, body{
+        background-color: rgb(255, 196, 0) !important;
+    }
+    #infosFence {
+        border-style: solid;
+	border-width: 39px;
+	border-image: url("../images/border.png") 39 stretch;
+    }
+
+    #imgFence {
+        border-radius: 50px;
+        box-shadow: 0px 0px 5px #2a3cad;
+    }
+    .navbar {
+        filter: drop-shadow(-1px 3px 3px rgba(50, 50, 0, 0.563));
+    }
+    #pokemons .card{
+      margin-left: 10px;
+      border: 2px #F8F9FA !important;
+      border-radius: 30px !important;
+      box-shadow: 2px 5px 5px #b4b4b4;
+      /* z-index: 0; */
+      background-color: #2a3cad !important;
+    }
+    #pokemons .card-body {
+      background-color: white;
+      border-radius: 50px 50px 0px 0px;
+      transition: transform 0.5s ease;
+    }
+
+    #pokemons .card:hover .card-body{
+        transform: translateY(-235px);
+    }
+
+    #pokemons .tab-pane{
+        padding-bottom : 100px;
+    }
 }
 
 @media screen and (min-width: 601px) {
@@ -20,6 +57,11 @@
         width : 300px;
         height: 300px;
     }
+
+    section {
+        height: 628px !important;
+        overflow: hidden !important;
+    }
     
     .dirty {
         filter: blur(2px) sepia(30%);
@@ -27,5 +69,73 @@
     
     #logo {
         height : 80px;
+        transition: transform 0.5s ease;
     }
+
+    #logo:hover {
+        filter: drop-shadow(-1px 3px 3px rgba(50, 50, 0, 0.563));
+        transform : scale(1.2);
+    }
+
+    html, main, body{
+        background-color: rgb(255, 196, 0) !important;
+    }
+    #infosFence {
+        border-style: solid;
+	border-width: 39px;
+	border-image: url("../images/border.png") 39 stretch;
+    }
+
+    #imgFence {
+        border-radius: 50px;
+        box-shadow: 0px 0px 5px #070a20;
+    }
+    .navbar {
+        filter: drop-shadow(-1px 3px 3px rgba(50, 50, 0, 0.563));
+    }
+    #pokemons .card{
+      margin-left: 10px;
+      border: 2px #F8F9FA !important;
+      border-radius: 30px !important;
+      box-shadow: 2px 5px 5px #252424;
+      /* z-index: 0; */
+    }
+
+    #pokemons .eau {
+        background-color: #2a3cad !important;
+    }
+
+    #pokemons .feu {
+        background-color: #ba2121 !important;
+    }
+
+    #pokemons .plante {
+        background-color: #00a02d !important;
+    }
+
+    #pokemons .insecte {
+        background-color: #0acf41 !important;
+    }
+
+    #pokemons .card-body {
+      background-color: white;
+      border-radius: 50px 50px 0px 0px;
+      transition: transform 0.5s ease;
+      box-shadow: 0px 0px 5px #070a20;
+    }
+
+    #pokemons .card:hover .card-body{
+        transform: translateY(-235px);
+    }
+
+    #pokemons .tab-pane{
+        padding-bottom : 100px;
+    }
+    #imgPokemonFence:hover {
+        transform : scale(1.2);
+    }
+    #imgPokemonFence {
+        transition: transform 0.5s ease;
+    }
+    
 }

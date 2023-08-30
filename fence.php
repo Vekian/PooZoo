@@ -12,7 +12,8 @@
     $fence = $pokemonZoo->getFence($fenceId);
     ?>
 <section >
-    <div class="d-flex flex-wrap" >
+    
+    <div class="d-flex flex-wrap" id="infosFence">
         <?php
             $employee->displayFence($fenceId, $pokemons);
         ?>
@@ -20,7 +21,7 @@
     <div id="infos">
 
     </div>
-    <div id="pokemons" class="d-flex flex-wrap">
+    <div id="pokemons" class="d-flex justify-content-center flex-wrap mt-1">
         <?php
             foreach($pokemons as $pokemon){
                 $type=$pokemon->getNameSpecies();

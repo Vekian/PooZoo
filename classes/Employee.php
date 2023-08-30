@@ -172,10 +172,10 @@ class Employee {
         $query = $this->db->query('SELECT * FROM fences WHERE id = "' . $idFence .'"');
         $fenceData = $query->fetch(PDO :: FETCH_ASSOC);
         $fence = new Fence($fenceData);
-        echo('<div class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto" id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
+        echo('<div  class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto" id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
         $fence->showRandomPokemons($pokemons);
         echo('</div>
-            <div class="border col-lg-6 col-12 text-center d-flex flex-column justify-content-center">
+            <div class=" col-lg-6 col-12 text-center d-flex flex-column justify-content-center" >
                 <h2>'. $fence->getName() .' </h2>
                 <p> Etat de l\'enclos: ' . $fence->getCleanliness() . '</p>
                 <p> Type d\'enclos: ' . $fence->getType() . '</p>
@@ -366,7 +366,7 @@ class Employee {
         return $pokemon;
     }
 
-    public function reproduce($pokemons) {
+    public function reproduce($pokemons, $reserve) {
         for($i = 0; $i < count($pokemons) - 1; $i++){
             $type = $pokemons[$i]->getNameSpecies();
             $sex = $pokemons[$i]->getSex();
@@ -379,7 +379,7 @@ class Employee {
                     $this->addPokemon($type::$babyId, $pokemons[$i]->getFenceId(), $pokemons[$i]->getNameSpecies());
                 }
                 else {
-                    $this->addPokemon($type::$babyId, 1, $pokemons[$i]->getNameSpecies());
+                    $this->addPokemon($type::$babyId, $reserve->getId(), $pokemons[$i]->getNameSpecies());
                 }
             }
         }
