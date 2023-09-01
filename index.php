@@ -36,7 +36,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h3> Prix de l'enclos : <?php echo($pokemonZoo->getPriceFence()); ?> <img src='images/pokedollar.png' height='30px' /></h3>
+                        <h3> Prix de l'enclos : <span id="priceFence"><?php echo($pokemonZoo->getPriceFence()); ?></span><img src='images/pokedollar.png' height='30px' /></h3>
                         <form action="process/addFence.php" method="POST" class="text-center m-4">
                             <label for="text" class="mt-1">Veuillez donner un nom à votre enclos : </label>
                             <input type="text" name="nameFence" id="nameFence" required><br />
@@ -101,6 +101,15 @@
     }
     ?>
     </main>
+    <script>
+    let selectFence = document.getElementById('typeFence');
+    selectFence.addEventListener("change", function (e) {
+        let nameFence = e.target.value;
+        let price = document.getElementById('priceFence').textContent;
+        let newPrice = parseInt(price) + 500;
+        document.getElementById('priceFence').textContent = newPrice;
+    });
+    </script>
     
 <?php
     include_once('footer.php');

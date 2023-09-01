@@ -10,5 +10,8 @@
     $price = $_POST['price'] * (-1);
     }
     $pokemonZoo->addFence($name, $type, $background, $_SESSION['LOGGED_USER']);
+    if ($type == "Legendaire"){
+        $price -= 500;
+    }
     $pokemonZoo->addMoney($price);
 header('Location:../index.php');

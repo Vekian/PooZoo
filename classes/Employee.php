@@ -175,9 +175,9 @@ class Employee {
         echo('<div  class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto " id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
         $fence->showRandomPokemons($pokemons);
         echo('</div>
-            <div class=" col-lg-6 col-12 text-center d-flex flex-column justify-content-center" >
+            <div class=" col-lg-6 col-12 text-center d-flex flex-column justify-content-center h3" >
                 <div class="infosZoo col-8 pt-3 mb-3 offset-2 ">
-                    <h2>'. $fence->getName() .' </h2>
+                    <h2><b>'. $fence->getName() .' </b></h2>
                     <p> Etat de l\'enclos: ' . $fence->getCleanliness() . '</p>
                     <p> Type d\'enclos: ' . $fence->getType() . '</p>
                     <p id="population"> Population : '. $fence->getPopulation() .'</p>
@@ -299,8 +299,9 @@ class Employee {
     public function findCompatiblePokemons($fenceId){
         $fence= $this->getFence($fenceId);
         $fenceType = $fence->getType();
-        $fenceTypes = $fenceType::$types;
         $parameters= "";
+        if ($fenceType != "Legendaire"){
+        $fenceTypes = $fenceType::$types;
         $index= 0;
         foreach($fenceTypes as $type){
             $parameters .= 'type1 = "'. $type .'" OR type2 = "'. $type .'"';
@@ -309,6 +310,13 @@ class Employee {
                 $index++;
             }
         }
+        if (!(in_array("Normal", $fenceTypes))){
+            $parameters .= ' OR name = "Metamorph"';
+        }}
+        else {
+            $parameters .= ' Legendary = 1';
+        }
+
         $answer = 'SELECT * FROM species WHERE ' . $parameters;
         $query = $this->db->query($answer);
         $species = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -320,13 +328,20 @@ class Employee {
             }
         }
         return $answer;
+
     }
     public function findCompatibleFences($pokemon){
+        $typeSpecie = $pokemon->getNameSpecies();
+        $parameters = "";
+        $fenceId = $pokemon->getFenceId();
+        if (isset($typeSpecie::$legendary)) {
+            $parameters .= ' type = "Legendaire" AND zoo_id = '. $_SESSION['LOGGED_USER'] .' OR type = "Reserve" AND zoo_id = '. $_SESSION['LOGGED_USER'];
+            
+        }
+        else {
         $type1 = $pokemon->getFirstType();
         $type2 = $pokemon->getSecondtype();
         $fenceTypes = Fence::$fenceTypes;
-        $fenceId = $pokemon->getFenceId();
-        $parameters = "";
         $index= 0;
         foreach($fenceTypes as $fenceType) {
             $typesCompatibles = $fenceType::$types;
@@ -339,7 +354,7 @@ class Employee {
                     $parameters .= 'type = "' . $fenceType . '"' . ' AND zoo_id = ' . $_SESSION['LOGGED_USER'];
                 }
             }
-        }
+        }}
         $answer = 'SELECT * FROM fences WHERE ' . $parameters;
         $query = $this->db->query($answer);
         $fencesData = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -384,7 +399,7 @@ class Employee {
             $sex2 = $pokemons[$i + 1]->getSex();
             $fence = $this->getFence($pokemons[$i]->getFenceId());
             $random = rand(1, 4);
-            if(($type === $type2) && ($sex != $sex2) && ($pokemons[$i]->getFenceId() === $pokemons[$i + 1]->getFenceId()) && ($random === 1)){
+            if(($type === $type2 || $type2 === "Metamorph") && ($sex != $sex2) && ($pokemons[$i]->getFenceId() === $pokemons[$i + 1]->getFenceId()) && ($random === 1)){
                 if ($fence->getPopulation() < 6) {
                     $this->addPokemon($type::$babyId, $pokemons[$i]->getFenceId(), $pokemons[$i]->getNameSpecies());
                 }
