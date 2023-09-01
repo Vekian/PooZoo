@@ -18,7 +18,9 @@
             $employee->displayFence($fenceId, $pokemons);
         ?>
     </div>
+    <div id="infos">
 
+    </div>
     <div id="pokemons" class="d-flex justify-content-center flex-wrap mt-1">
         <div id="indicatorBefore">
         </div>
@@ -31,115 +33,64 @@
             }
             $jsonPriceFree = json_encode($priceFree);
         ?>
-        <div id="indicatorNext"> 
+         <div id="indicatorNext"> 
         </div>
     </div>
 </section>
 <script>
     let cards = document.getElementsByClassName('card');
-    let index = 0;
-    detectWidth(cards);
     function detectWidth(cards) {
-        if ((window.innerWidth < 900) && (cards.length != 1)){
+        if (window.innerWidth < 1200) {
             let buttonBefore = document.createElement('button');
             buttonBefore.setAttribute('id', 'before');
-            buttonBefore.classList.add('btn', 'mt-5');
-            buttonBefore.innerHTML = "<img src='images/gauche.png' height='50px' width='10px' />";
+            buttonBefore.textContent = "Before";
             let parentBefore = document.getElementById('indicatorBefore');
             parentBefore.appendChild(buttonBefore);
 
             let buttonNext = document.createElement('button');
             buttonNext.setAttribute('id', 'next');
-            buttonNext.classList.add('btn', 'ms-3', 'mt-5');
-            buttonNext.innerHTML = "<img src='images/droite.png' height='50px' width='10px' />";
+            buttonNext.textContent = "Next";
             let parentNext = document.getElementById('indicatorNext');
             parentNext.appendChild(buttonNext);
-
-            cards[index].classList.remove('d-none');
-            for (let i = 0; i < cards.length; i++){
-                if (i != index){
-                    cards[i].classList.add('d-none');
-                }
-                cards[i].style.width = "12rem";
-            }
-        nextCard(cards, 3);
-        beforeCard(cards, 3);
-        }
-
-        else if ((window.innerWidth < 1404) && (cards.length > 3)) {
-            let buttonBefore = document.createElement('button');
-            buttonBefore.setAttribute('id', 'before');
-            buttonBefore.classList.add('btn', 'mt-5');
-            buttonBefore.innerHTML = "<img src='images/gauche.png' height='50px' />";
-            let parentBefore = document.getElementById('indicatorBefore');
-            parentBefore.appendChild(buttonBefore);
-
-            let buttonNext = document.createElement('button');
-            buttonNext.setAttribute('id', 'next');
-            buttonNext.classList.add('btn', 'ms-3', 'mt-5');
-            buttonNext.innerHTML = "<img src='images/droite.png' height='50px' />";
-            let parentNext = document.getElementById('indicatorNext');
-            parentNext.appendChild(buttonNext);
-            
             for (let i=0; i < cards.length; i++) {
             if (i >= 3) {
                 cards[i].classList.add('d-none');
             }
-            }  
-        nextCard(cards, 3);
-        beforeCard(cards, 3);
+            }
+            nextCard(cards);
+            beforeCard(cards);
         }
+
     }
-    function nextCard(cards, display) {
+    function nextCard(cards) {
     document.getElementById('next').addEventListener('click', function(e){
-        
-        if ((window.innerWidth < 900) && (index < (cards.length - 1))) {
-            index++;
-            cards[index].classList.remove('d-none');
-        }
         for (let i=0; i < cards.length; i++) {
-            if (window.innerWidth < 900){
-                if (i != index){
-                    cards[i].classList.add('d-none');
-                }
+            if (i < 3) {
+                cards[i].classList.add('d-none');
             }
             else {
-                if (i < display) {
-                    cards[i].classList.add('d-none');
-                }
-                else {
-                    cards[i].classList.remove('d-none')
-                }
+                cards[i].classList.remove('d-none')
             }
         }
     });};
 
-    function beforeCard(cards, display){
+    function beforeCard(cards){
     document.getElementById('before').addEventListener('click', function(e){
-        
-        if ((window.innerWidth < 900) && (index > 0)) {
-            index--;
-            cards[index].classList.remove('d-none');
-        }
         for (let i=0; i < cards.length; i++) {
-            if ((window.innerWidth < 900)  && (index >= 0)){
-                if (i != index){
-                    cards[i].classList.add('d-none');
-                }
+            if (i >= 3) {
+                cards[i].classList.add('d-none');
             }
             else {
-                if (i >= display) {
-                    cards[i].classList.add('d-none');
-                }
-                else {
-                    cards[i].classList.remove('d-none')
-                }
+                cards[i].classList.remove('d-none')
             }
         }
     }
     );};
+
+    detectWidth(cards);
+    
 </script>
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -167,7 +118,7 @@
                             </div>
                             <input type="hidden" id="price" name="price" value="">
                             <img id="img" src="" width="100px"/> 
-                            <input type="submit" value="Ajouter à l'enclos" class="comic-button">
+                            <input type="submit" value="Ajouter à l'enclos" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -196,7 +147,7 @@
                                 }
                             ?>
                             </select class="btn btn-primary">
-                            <input type="submit" value="Enlever de l'enclos" class="comic-button">
+                            <input type="submit" value="Enlever de l'enclos" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -207,8 +158,44 @@
     let contentPrice = document.getElementById('priceSpecies');
     let species = <?= $jsonSpecies ?>;
     let priceSpecies = <?= $jsonPriceSpecies ?>;
+    document.getElementById('idSpecies').addEventListener("change", function (e) {
+        let idSpecies = e.target.value;
+        let src;
+        let name;
+        let price;
+        for(let i =0; i < species.length; i++) {
+            if (idSpecies == species[i]['id']){
+                src = species[i]['avatar'];
+                name = species[i]['name'];
+                price = priceSpecies[i] * 3;
+            }
+        }
+        image.setAttribute("src", src);
+        contentPrice.innerHTML = price + " <img src='images/pokedollar.png' height='20px' />";
+        document.getElementById('name1').value = name;
+        document.getElementById('price').value = price;
+    });
+
     let pricesFree = <?= $jsonPriceFree ?>;
+    let selectFree = document.getElementById('idSpecies2');
+    selectFree.addEventListener("change", function (e) {
+        let nameFree = selectFree.options[selectFree.selectedIndex].text;
+        let price = pricesFree[nameFree];
+        document.getElementById('price2').value = price;
+        document.getElementById('priceFree').innerHTML = 'Redonnez sa liberté à ce pokemon vous accordera ' + price + ' <img src="images/pokedollar.png" height="20px" /> par la Société Protectrice des Pokemons';
+    });
+
+    let population = document.getElementById('population').textContent;
+    let inputAdd = document.getElementById('addPokemon');
+    if (population === ' Population : 6') {
+        document.getElementById('population').textContent += ' (max)';
+        inputAdd.classList.add('d-none');
+    }
+
     cleanliness = '<?php echo($fence->getCleanliness()); ?>';
+    if(cleanliness === 'Sale'){
+        document.getElementById('imgFence').classList.add('dirty');
+    }
 </script>
 <?php
     include_once('footer.php');

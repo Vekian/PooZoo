@@ -1,18 +1,18 @@
 <?php
-    class Papilusion extends Pokemon {
+    class Raichu extends Pokemon {
         private int $speciesId;
         private string $nameSpecies;
         private string $diet;
         private string $firstType;
         private string $secondType;
         private string $avatar;
-        public static $minWeight = 15;
-        public static $minHeight = 80;
-        public static $maxWeight = 32;
-        public static $maxHeight = 110;
+        public static $minWeight = 10;
+        public static $minHeight = 35;
+        public static $maxWeight = 30;
+        public static $maxHeight = 80;
         public static $lifeExpectancy = 20;
-        public static $popularity = 30;
-        public static $babyId = 16;
+        public static $popularity = 15;
+        public static $babyId = 31;
     
         /**
          * Get the value of species_id
@@ -144,7 +144,7 @@
                 $state = $this->getNameSpecies(). " s'ennuie dans la réserve.";
             }
             else {
-            $state = $this->getNameSpecies(). " s'amuse dans l'herbe.";
+            $state = $this->getNameSpecies(). " remue joyeusement sa queue";
             }
             return $state;
         }

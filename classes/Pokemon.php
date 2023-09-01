@@ -225,7 +225,7 @@
 
         public function showPokemon($fenceId, $employee){
                 $sex = "";
-                $priceFeed = round(2 + (1 + ($this->getWeight() / 50)));
+                $priceFeed = round(2 + ($this->getWeight() / 10));
                 $fences = $employee->findCompatibleFences($this);
                 $type = $this->getNameSpecies();
                 $imgMoney = "<img src='images/pokedollar.png' height='20px' />";
@@ -236,37 +236,41 @@
                         $sex = '<i class="fa-solid fa-mars" style="color: #1c71d8;"></i>';
                 }
                 
-                echo('<div class="card text-center '. strtolower($this->getFirstType()) .'" style="width: 15%;">
-                <img src="' . $this->getAvatar() . '" class="col-4 offset-4" alt="' . $this->getNameSpecies() . '" height="100px" >
+                echo('<div class="card text-center '. strtolower($this->getFirstType()) .'" style="width: 14rem;">
+                <img src="' . $this->getAvatar() . '" class="col-4 offset-4 imgPokemon" alt="' . $this->getNameSpecies() . '" height="80px">
                 <div class="card-body">
                 <h5 class="card-title">' . $this->getNameSpecies() . ' ' . $sex . '</h5>
 
                 <nav class="my-3">
                         <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                                 <button class="nav-link active p-1 " id="nav-about-tab'. $this->getId() .'" data-bs-toggle="tab" data-bs-target="#nav-about'. $this->getId() .'" type="button" role="tab" aria-controls="nav-about'. $this->getId() .'" aria-selected="true"> Infos </button>
-                                <button class="nav-link p-1 m-1" id="nav-stats-tab'. $this->getId() .'" data-bs-toggle="tab" data-bs-target="#nav-stats'. $this->getId() .'" type="button" role="tab" aria-controls="nav-stats'. $this->getId() .'" aria-selected="true"> Base Stats </button>
+                                <button class="nav-link p-1 ms-2 me-1" id="nav-stats-tab'. $this->getId() .'" data-bs-toggle="tab" data-bs-target="#nav-stats'. $this->getId() .'" type="button" role="tab" aria-controls="nav-stats'. $this->getId() .'" aria-selected="true"> Stats </button>
                                 <button class="nav-link p-1" id="nav-moves-tab'. $this->getId() .'" data-bs-toggle="tab" data-bs-target="#nav-moves'. $this->getId() .'" type="button" role="tab" aria-controls="nav-moves'. $this->getId() .'" aria-selected="true"> Actions </button>
                         </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent'. $this->getId() .'">
                         <div class="tab-pane fade show active" id="nav-about'. $this->getId() .'" role="tabpanel" aria-labelledby="nav-home-tab">'
-                                . $this->getHealth() . ' <i class="fa-solid fa-heart" style="color: #e01b24;"></i>
-                                <p class="card-text">'. $this->showStateOfPokemon($fenceId) .'</p>');
+                                . $this->getHealth() . ' <i class="fa-solid fa-heart me-2" style="color: #e01b24;"></i>'. $type::$popularity .'<i class="fa-solid fa-star ms-1" style="color: #ffff00;"></i>
+                                <br /><b><i>'. $this->showStateOfPokemon($fenceId) .'</i></b><br />');
                                 if ($this->getHungry() === true) {
-                                        echo('<a href="process/processFeedPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '&price=' . $priceFeed . '" class="btn btn-primary">Nourrir : '. $priceFeed . ' ' . $imgMoney .'</a>');
+                                        echo('<a href="process/processFeedPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '&price=' . $priceFeed . '" class="comic-button">Nourrir : '. $priceFeed . ' ' . $imgMoney .'</a>');
                                     }
                                     if ($this->getSleepy() === true) {
-                                        echo('<a href="process/processSleepPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '" class="btn btn-primary">Reposer</a>');
+                                        echo('<a href="process/processSleepPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '" class="comic-button">Reposer</a>');
                                     }
                                     if (($this->getSick() === true) || ($this->getHealth() < 100)) {
-                                        echo('<a href="process/processHealPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '&price=10" class="btn btn-primary">Soigner : 10 '. $imgMoney .'</a>');
+                                        echo('<a href="process/processHealPokemon.php?id='. $this->getId() .'&fenceId=' . $this->getFenceId() . '&price=10" class="comic-button">Soigner : 10 '. $imgMoney .'</a>');
                                     }
+                echo('<br />Type(s) : <img src="images/' . $this->getFirstType() . '.png" height="20px" />');
+                if ($this->getSecondType() !== "none"){
+                        echo('<img src="images/' . $this->getSecondType() . '.png" height="20px" class="m" />');
+                }
                 echo('  </div>
                         <div class="tab-pane fade" id="nav-stats'. $this->getId() .'" role="tabpanel" aria-labelledby="nav-stats-tab">
                                 <table class="table table-borderless m-1">
                                         <tr>
-                                        <th class="text-muted" style="width: 50px;">HP</th>
-                                        <td style="width: 50px; text-align: right;">' . $this->getHealth() . '</td>
+                                        <th class="text-muted" style="width: 10px;">HP</th>
+                                        <td style="width: 10px; text-align: right;">' . $this->getHealth() . '</td>
                                         <td>
                                                 <div class="progress my-2" style="height: 8px;">
                                                         <div class="progress-bar" role="progressbar" style="width: ' . $this->getHealth() . '%;" aria-valuenow="' . $this->getHealth() . '" aria-valuemin="0" aria-valuemax="100"></div>
@@ -275,8 +279,8 @@
                                         </tr>
                 
                                         <tr>
-                                        <th class="text-muted" style="width: 50px;">Âge</th>
-                                        <td style="width: 50px; text-align: right;">' . $this->getAge() . '</td>
+                                        <th class="text-muted" style="width: 10px;">Âge</th>
+                                        <td style="width: 10px; text-align: right;">' . $this->getAge() . '</td>
                                         <td>
                                                 <div class="progress my-2" style="height: 8px;">
                                                         <div class="progress-bar" role="progressbar" style="width: '. (($this->getAge() / $type::$lifeExpectancy) * 100) .'%;" aria-valuenow="' . $this->getAge() . '" aria-valuemin="0" aria-valuemax="'. $type::$lifeExpectancy .'"></div>
@@ -284,8 +288,8 @@
                                         </td>
                                         </tr>
                                         <tr>
-                                        <th class="text-muted" style="width: 50px;">Taille</th>
-                                        <td style="width: 50px; text-align: right;">' . $this->getHeight() . '</td>
+                                        <th class="text-muted" style="width: 10px;">Taille</th>
+                                        <td style="width: 10px; text-align: right;">' . $this->getHeight() . '</td>
                                         <td>
                                         <div class="progress my-2" style="height: 8px;">
                                         <div class="progress-bar" role="progressbar" style="width: ' . (($this->getHeight() / $type::$maxWeight) * 100) . '%;" aria-valuenow="' . $this->getHeight() . '" aria-valuemin="0" aria-valuemax="'. $type::$maxWeight .'"></div>
@@ -293,8 +297,8 @@
                                         </td>
                                         </tr>
                                         <tr>
-                                        <th class="text-muted" style="width: 50px;">Poids</th>
-                                        <td style="width: 50px; text-align: right;">' . $this->getWeight() . '</td>
+                                        <th class="text-muted" style="width: 10px;">Poids</th>
+                                        <td style="width: 10px; text-align: right;">' . $this->getWeight() . '</td>
                                         <td>
                                                 <div class="progress my-2" style="height: 8px;">
                                                         <div class="progress-bar" role="progressbar" style="width: ' . (($this->getWeight() / $type::$maxWeight) * 100) . '%;" aria-valuenow="' . $this->getWeight() . '" aria-valuemin="0" aria-valuemax="'. $type::$maxWeight .'"></div>
@@ -304,7 +308,7 @@
                                 </table>
                         </div>
                         <div class="tab-pane fade" id="nav-moves'. $this->getId() .'" role="tabpanel" aria-labelledby="nav-moves-tab">
-                                <button type="button" id="movePokemon'. $this->getId().'" class="btn btn-primary  mt-2" data-bs-toggle="modal" data-bs-target="#moveModal'. $this->getId().'">
+                                <button type="button" id="movePokemon'. $this->getId().'" class="comic-button  mt-2" data-bs-toggle="modal" data-bs-target="#moveModal'. $this->getId().'">
                                         Déplacer le pokemon : -5 <img src="images/pokedollar.png" height="20px" />
                                 </button>
                         </div>
@@ -314,29 +318,29 @@
 
 
 
-                echo('<div class="modal fade" id="moveModal'. $this->getId().'" tabindex="-1" aria-labelledby="moveModalLabel'. $this->getId().'" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="moveModalLabel'. $this->getId().'">Déplacer un pokemon de l\'enclos</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        echo('  <div class="modal fade" id="moveModal'. $this->getId().'" tabindex="-1" aria-labelledby="moveModalLabel'. $this->getId().'" aria-hidden="true">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="moveModalLabel'. $this->getId().'">Déplacer un pokemon de l\'enclos</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                                <form action="process/movePokemonFromFence.php" method="POST" class="text-center m-4">
+                                                        <input type="hidden" value="' . $fenceId . '" name="fenceId">
+                                                        <input type="hidden" value="'. $this->getId() .'" name="pokemonId">
+                                                        <label for="newFence" class="mt-1">Choisissez un enclos </label>
+                                                        <select name="newFenceId" id="newFence" required>');
+                                                        echo('<option value="" selected disabled hidden>Choisir</option>');
+                                                        foreach($fences as $fence) {
+                                                                echo('<option value="'. $fence->getId() . '">' . $fence->getName() . '</option>');
+                                                                };
+                                        echo('          </select>
+                                                        <input type="submit" value="Déplacer vers l\'enclos" class="comic-button">
+                                                </form>
+                                        </div>
+                                </div>
                         </div>
-                        <div class="modal-body text-center">
-                            <form action="process/movePokemonFromFence.php" method="POST" class="text-center m-4">
-                                <input type="hidden" value="' . $fenceId . '" name="fenceId">
-                                <input type="hidden" value="'. $this->getId() .'" name="pokemonId">
-                                <label for="newFence" class="mt-1">Choisissez un enclos </label>
-                                <select name="newFenceId" id="newFence" required>');
-                                    echo('<option value="" selected disabled hidden>Choisir</option>');
-                                    foreach($fences as $fence) {
-                                        echo('<option value="'. $fence->getId() . '">' . $fence->getName() . '</option>');
-                                        };
-                echo('</select>
-                                <input type="submit" value="Enlever de l\'enclos" class="btn btn-primary">
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 </div>');
         }
 

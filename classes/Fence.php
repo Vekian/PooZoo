@@ -8,7 +8,7 @@
         private int $population;
         private int $zooId;
         private static int $maxPokemons = 6;
-        public static $fenceTypes = ['Normal', 'Forest', 'Aquarium', 'Reserve'];
+        public static $fenceTypes = ['Normal', 'Forest', 'Aquarium', 'Reserve', 'Cavern', 'City'];
 
         /**
          * Get the value of id

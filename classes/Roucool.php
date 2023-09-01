@@ -6,6 +6,16 @@
         private string $firstType;
         private string $secondType;
         private string $avatar;
+        public static $minWeight = 1;
+        public static $minHeight = 15;
+        public static $maxWeight = 2;
+        public static $maxHeight = 30;
+        public static $lifeExpectancy = 10;
+        public static $ageEvolution = 5;
+        public static $idEvolution = 23;
+        public static $nameEvolution = 'Roucoups';
+        public static $popularity = 10;
+        public static $babyId = 22;
     
         /**
          * Get the value of species_id
@@ -137,7 +147,7 @@
                 $state = $this->getNameSpecies(). " s'ennuie dans la réserve.";
             }
             else {
-            $state = $this->getNameSpecies(). " vole dans le ciel.";
+            $state = $this->getNameSpecies(). " s'envole dans les airs";
             }
             return $state;
         }

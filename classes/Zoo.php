@@ -234,18 +234,20 @@
             foreach ($this->fences as $fence) {
                 if($fence->getName() !== "Reserve") {
                 echo('<div class="card m-3" style="width: 18rem;">');
-                echo('<img src="' . $fence->getBackground() . '" class="card-img-top" alt="'. $fence->getType() . '" height="200px">
+                echo('<a href="fence.php?fenceId='. $fence->getId() .'" ><img src="' . $fence->getBackground() . '" class="card-img-top" alt="'. $fence->getType() . '" height="200px"></a>
                         <div class="card-body">
-                                <h5 class="card-title">'. $fence->getName() .'</h5>
-                                <p class="card-text">Contient : ' . $fence->getPopulation() . ' pokemons</p>
-                                <p class="card-text">L\'état de l\'enclos est : ' . $fence->getCleanliness() . '</p>
-                                <div class="d-flex justify-content-center">
+                                <div class="infoGameboy">
+                                        <h5>'. $fence->getName() .'</h5>
+                                        <p>Contient ' . $fence->getPopulation() . ' pokemons</p>
+                                        <p>L\'état de l\'enclos est ' . strtolower($fence->getCleanliness()) . '</p>
+                                </div>
+                                <div class="d-flex justify-content-center ">
                                         <form action="fence.php" method="GET">
                                                 <input type="hidden" name="fenceId" value="' . $fence->getId() . '">
-                                                <input type="submit" value="Voir l\'enclos" class="btn btn-primary">
+                                                <button type="submit" class="button bg-primary"><span>Voir l\'enclos</span></button>
                                         </form>
-                                        <button type="button" id="deleteFence'. $i . '" class="btn btn-danger ms-3" data-bs-toggle="modal" data-bs-target="#deleteFenceModal'. $i .'">
-                                        Détruire
+                                        <button type="button" id="deleteFence'. $i . '" class="button ms-3" data-bs-toggle="modal" data-bs-target="#deleteFenceModal'. $i .'">
+                                        <span>Détruire</span>
                                         </button>
                                 </div>
                         </div>

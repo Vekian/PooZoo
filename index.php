@@ -4,24 +4,28 @@
         $fences= $pokemonZoo->getFences();
 ?>
     <main class="text-center" id="infosFence">
-        <h1>
-            Bienvenue au <?php echo($pokemonZoo->getName()); ?> !
-        </h1>
-        <h2>
-            Il y a <?php  echo($pokemonZoo->numberTotal()); ?> pokemons dans le zoo. (dont <?php echo($fences[0]->getPopulation()) ?> dans la réserve)
-        </h2>
-        <div id="fences" class="d-flex justify-content-center flex-wrap">
+        <div class="col-8 offset-2 infosZoo mt-3 mb-4">
+            <h1>
+                Bienvenue au <?php echo($pokemonZoo->getName()); ?> !
+            </h1>
+            <h2>
+                Il y a <?php  echo($pokemonZoo->numberTotal()); ?> pokemons dans le zoo. (dont <?php echo($fences[0]->getPopulation()) ?> dans la réserve)
+            </h2>
+        </div>
+        <div id="fences" class="d-flex justify-content-center align-items-center flex-wrap">
             <?php 
                 
                 $pokemonZoo->displayFences();
             ?>
-            <button type="button" id="addFence" class="btn btn-secondary col-3 ms-3 <?php
-            if (count($pokemonZoo->getFences()) - 1 >= $pokemonZoo->getNumberMaxFences()) {
-                echo('d-none');
-            }
-            ?>" data-bs-toggle="modal" data-bs-target="#addFenceModal">
-                Ajouter un enclos
-            </button>
+            <div>
+                <button type="button" id="addFence" class="btn1 <?php
+                if (count($pokemonZoo->getFences()) - 1 >= $pokemonZoo->getNumberMaxFences()) {
+                    echo('d-none');
+                }
+                ?>" data-bs-toggle="modal" data-bs-target="#addFenceModal">
+                    Ajouter un enclos
+                </button>
+            </div>
         </div>
 
         <div class="modal fade" id="addFenceModal" tabindex="-1" aria-labelledby="addFenceModalLabel" aria-hidden="true">
@@ -62,32 +66,36 @@
         }
     ?>
     <div class="text-center">
-        <h4 class="m-3"> Veuillez vous connecter</h4>
-        <form action="process/connect.php" method="POST" class="m-3">
-            <label for="pseudo" >Identifiant (nom du zoo) : </label>
-            <input type="text" id="pseudo" name="pseudo" required class="m-3" placeholder="Nom du Zoo" ><br />
-            <label for="password">Mot de passe : </label>
-            <input type="password" id="password" name="password" required class="mb-3 ms-3"><br />
-            <input type="submit" id="submit" value="Se connecter">
-        </form>
-        <h4> Ou créer un compte </h4>
-        <form action="process/post-create-user.php" method="POST" class="m-3">
-            <label for="pseudo" >Choisissez un nom pour votre zoo : </label>
-            <input type="text" id="pseudo" name="pseudo" required class="m-3" placeholder="Nom du Zoo" ><br />
-            <label for="pseudoUser">Choisissez un nom pour votre employé : </label>
-            <input type="text" id="pseudoUser" name="pseudoUser" required placeholder="Nom de l'employé">
-            <label for="sex">Choisissez le sexe votre employé : </label>
-            <select name="sex" id="sex" required>
-                <option value="" selected disabled hidden>Choisir</option>
-                <option value="male" >Homme</option>
-                <option value="female" >Femme</option>
-            </select>
-            <label for="age">Choisissez l'âge de votre employé : </label>
-            <input type="number" id="age" name="age" required placeholder="Âge de l'employé" class="mb-3" min="16"><br />
-            <label for="password">Mot de passe : </label>
-            <input type="password" id="password" name="password" required class="mb-3 ms-3"><br />
-            <input type="submit" id="submit" value="Se connecter">
-        </form>
+        <div class="login col-8 offset-2 mt-3">
+            <h4 class="m-3"> Veuillez vous connecter</h4>
+            <form action="process/connect.php" method="POST" class="m-3">
+                <label for="pseudo" >Identifiant (nom du zoo) : </label>
+                <input type="text" id="pseudo" name="pseudo" required class="m-3" placeholder="Nom du Zoo" ><br />
+                <label for="password">Mot de passe : </label>
+                <input type="password" id="password" name="password" required class="mb-3 ms-3"><br />
+                <button class="button bg-warning" type="submit" id="submit">Se connecter</button>
+            </form>
+        </div>
+        <div class="login col-8 offset-2 mt-3">
+            <h4> Ou créer un compte </h4>
+            <form action="process/post-create-user.php" method="POST" class="m-3">
+                <label for="pseudo" >Choisissez un nom pour votre zoo : </label>
+                <input type="text" id="pseudo" name="pseudo" required class="m-3" placeholder="Nom du Zoo" ><br />
+                <label for="password">Choisissez un mot de passe : </label>
+                <input type="password" id="password" name="password" required class="mb-3 ms-3"><br />
+                <label for="pseudoUser">Choisissez un nom pour votre employé : </label>
+                <input type="text" id="pseudoUser" name="pseudoUser" required placeholder="Nom de l'employé">
+                <label for="sex" class="mt-3">Choisissez le sexe votre employé : </label>
+                <select name="sex" id="sex" required>
+                    <option value="" selected disabled hidden>Choisir</option>
+                    <option value="male" >Homme</option>
+                    <option value="female" >Femme</option>
+                </select><br />
+                <label for="age" class="mt-3">Choisissez l'âge de votre employé : </label>
+                <input type="number" id="age" name="age" required placeholder="Âge de l'employé" class="mb-3" min="16"><br />
+                <button class="button bg-warning" type="submit" id="submit" >S'inscrire</button>
+            </form>
+        </div>
     </div>
     <?php
     }

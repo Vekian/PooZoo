@@ -172,32 +172,42 @@ class Employee {
         $query = $this->db->query('SELECT * FROM fences WHERE id = "' . $idFence .'"');
         $fenceData = $query->fetch(PDO :: FETCH_ASSOC);
         $fence = new Fence($fenceData);
-        echo('<div  class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto" id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
+        echo('<div  class="col-lg-6 col-12 d-flex align-items-end justify-content-around overflow-auto " id="imgFence" style="background-image: url(\'' . $fence->getBackground() . '\'); height: 400px; background-size: cover; background-position: bottom">');
         $fence->showRandomPokemons($pokemons);
         echo('</div>
             <div class=" col-lg-6 col-12 text-center d-flex flex-column justify-content-center" >
-                <h2>'. $fence->getName() .' </h2>
-                <p> Etat de l\'enclos: ' . $fence->getCleanliness() . '</p>
-                <p> Type d\'enclos: ' . $fence->getType() . '</p>
-                <p id="population"> Population : '. $fence->getPopulation() .'</p>
+                <div class="infosZoo col-8 pt-3 mb-3 offset-2 ">
+                    <h2>'. $fence->getName() .' </h2>
+                    <p> Etat de l\'enclos: ' . $fence->getCleanliness() . '</p>
+                    <p> Type d\'enclos: ' . $fence->getType() . '</p>
+                    <p id="population"> Population : '. $fence->getPopulation() .'</p>
+                </div>
                 <div class="d-flex flex-wrap justify-content-center">');
         if ($fence->getCleanliness() === "Correct"){
             $priceCleanFence = $fence->getPopulation() * 3;
-        echo('<a href="process/processCleanFence.php?fenceId=' . $idFence . '&price='. $priceCleanFence .'" class="btn btn-primary col-3">Nettoyer l\'enclos : '. ($priceCleanFence) . ' <img src="images/pokedollar.png" height="20px" /></a>');
+            echo('<form action="process/processCleanFence.php" method="GET">
+            <input type="hidden" name="fenceId" value="'. $idFence .'" />
+            <input type="hidden" name="price" value="'. $priceCleanFence .'" />
+            <button type="submit" class="button col-12 mt-3"><span>Nettoyer l\'enclos : '. ($priceCleanFence) . ' <img src="images/pokedollar.png" height="20px" /></span></button>
+            </form>');
         }
         else if ($fence->getCleanliness() === "Sale"){
             $priceCleanFence = $fence->getPopulation() * 5;
-        echo('<a href="process/processCleanFence.php?fenceId=' . $idFence . '&price='. $priceCleanFence . '" class="btn btn-primary col-3">Nettoyer l\'enclos : '. ($priceCleanFence) . ' <img src="images/pokedollar.png" height="20px" /></a>');
+        echo('<form action="process/processCleanFence.php" method="GET">
+        <input type="hidden" name="fenceId" value="'. $idFence .'" />
+        <input type="hidden" name="price" value="'. $priceCleanFence .'" />
+        <button type="submit" class="button col-12 mt-3"><span>Nettoyer l\'enclos : '. ($priceCleanFence) . ' <img src="images/pokedollar.png" height="20px" /></span></button>
+        </form>');
         }
-        echo('<button type="button" id="addPokemon" class="btn btn-primary col-3 ms-3');
+        echo('<button type="button" id="addPokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-8 mt-3 ms-3');
         if ($idFence == 1) {
             echo(' d-none');
         }
-        echo('" data-bs-toggle="modal" data-bs-target="#addModal">
-                        Ajouter un Pokemon
+        echo('" data-bs-toggle="modal" data-bs-target="#addModal"><span>
+                        Ajouter un Pokemon</span>
                     </button>
-                    <button type="button" id="removePokemon" class="btn btn-primary col-3 ms-3" data-bs-toggle="modal" data-bs-target="#removeModal">
-                        Libérer un pokemon
+                    <button type="button" id="removePokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-8 ms-3 mt-3" data-bs-toggle="modal" data-bs-target="#removeModal">
+                        <span>Libérer un pokemon</span>
                     </button>
                 </div>
             </div>');
@@ -335,7 +345,7 @@ class Employee {
         $fencesData = $query->fetchAll(PDO::FETCH_ASSOC);
         $fencesArray = [];
             foreach($fencesData as $fenceData) {
-                if ($fenceData['id'] != $fenceId){
+                if (($fenceData['id'] != $fenceId) && ($fenceData['population'] < 6)){
                     array_push($fencesArray, new Fence($fenceData));
                 }
             }
