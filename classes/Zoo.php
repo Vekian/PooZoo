@@ -237,7 +237,7 @@
                 echo('<a href="fence.php?fenceId='. $fence->getId() .'" ><img src="' . $fence->getBackground() . '" class="card-img-top" alt="'. $fence->getType() . '" height="200px"></a>
                         <div class="card-body">
                                 <div class="infoGameboy">
-                                        <h5>'. $fence->getName() .'</h5>
+                                        <h5>'. htmlspecialchars($fence->getName()) .'</h5>
                                         <p>Contient ' . $fence->getPopulation() . ' pokemons</p>
                                         <p>L\'état de l\'enclos est ' . strtolower($fence->getCleanliness()) . '</p>
                                 </div>

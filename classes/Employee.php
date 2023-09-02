@@ -177,9 +177,9 @@ class Employee {
         echo('</div>
             <div class=" col-lg-6 col-12 text-center d-flex flex-column justify-content-center h3" >
                 <div class="infosZoo col-8 pt-3 mb-3 offset-2 ">
-                    <h2><b>'. $fence->getName() .' </b></h2>
+                    <h2><b>'. htmlspecialchars($fence->getName()) .' </b></h2>
                     <p> Etat de l\'enclos: ' . $fence->getCleanliness() . '</p>
-                    <p> Type d\'enclos: ' . $fence->getType() . '</p>
+                    <p> Type d\'enclos: <span  id="namePopulation">' . $fence->getType() . '</span></p>
                     <p id="population"> Population : '. $fence->getPopulation() .'</p>
                 </div>
                 <div class="d-flex flex-wrap justify-content-center">');
@@ -236,7 +236,10 @@ class Employee {
         $random = rand(0, 1);
         $sex="";
         $typeName = $type;
-        if($random === 0) {
+        if ($speciesId == 43) {
+            $random = 1;
+        }
+        else if(($random === 0) || ($speciesId == 46)) {
             $sex = "female";
         }
         else {
@@ -296,6 +299,21 @@ class Employee {
         }
     }
 
+    public function checkLegendary($fenceId) {
+        $answer = 'SELECT * FROM pokemons 
+                    JOIN species ON pokemons.species_id = species.id
+                    WHERE fence_id = ' . $fenceId;
+        $query = $this->db->query($answer);
+        $pokemons = $query->fetchAll(PDO::FETCH_ASSOC);
+        $arrayLegendary = [];
+        foreach($pokemons as $pokemon) {
+            if ($pokemon['Legendary'] == 1) {
+                array_push($arrayLegendary, $pokemon['species_id']);
+            }
+        }
+        return $arrayLegendary;
+    }
+
     public function findCompatiblePokemons($fenceId){
         $fence= $this->getFence($fenceId);
         $fenceType = $fence->getType();
@@ -321,12 +339,23 @@ class Employee {
         $query = $this->db->query($answer);
         $species = $query->fetchAll(PDO::FETCH_ASSOC);
         $answer = [];
-        foreach($species as $specie){
-            $type = $specie['name'];
-            if ($type::$babyId == $specie['id']) {
-                array_push($answer, $specie);
+        if ($fenceType === "Legendaire"){
+            $arrayLegendaryId = $this->checkLegendary($fenceId);
+            foreach ($species as $specie) {
+                $type = $specie['name'];
+                if ((!in_array($specie['id'], $arrayLegendaryId)) && ($type::$babyId == $specie['id'])) {
+                    array_push($answer, $specie);
+                }
             }
         }
+        else {
+        foreach($species as $specie){
+            $type = $specie['name'];
+            if (($type::$babyId == $specie['id']) && (!isset($type::$legendary))) {
+                array_push($answer, $specie);
+            }
+        }}
+
         return $answer;
 
     }
@@ -360,7 +389,7 @@ class Employee {
         $fencesData = $query->fetchAll(PDO::FETCH_ASSOC);
         $fencesArray = [];
             foreach($fencesData as $fenceData) {
-                if (($fenceData['id'] != $fenceId) && ($fenceData['population'] < 6)){
+                if (($fenceData['id'] != $fenceId) && (($fenceData['population'] < 6) || ($fenceData['nameFence'] === "Reserve"))){
                     array_push($fencesArray, new Fence($fenceData));
                 }
             }
@@ -395,17 +424,42 @@ class Employee {
         for($i = 0; $i < count($pokemons) - 1; $i++){
             $type = $pokemons[$i]->getNameSpecies();
             $sex = $pokemons[$i]->getSex();
-            $type2 = $pokemons[$i + 1]->getNameSpecies();
-            $sex2 = $pokemons[$i + 1]->getSex();
             $fence = $this->getFence($pokemons[$i]->getFenceId());
-            $random = rand(1, 4);
-            if(($type === $type2 || $type2 === "Metamorph") && ($sex != $sex2) && ($pokemons[$i]->getFenceId() === $pokemons[$i + 1]->getFenceId()) && ($random === 1)){
-                if ($fence->getPopulation() < 6) {
-                    $this->addPokemon($type::$babyId, $pokemons[$i]->getFenceId(), $pokemons[$i]->getNameSpecies());
+            $random = rand(1, 7);
+            for($j = ($i+1); $j < count($pokemons) - 1; $j++){
+                $type2 = $pokemons[$j]->getNameSpecies();
+                $sex2 = $pokemons[$j]->getSex();
+                
+                if (($type::$babyId == 43 && $type2::$babyId == 46) || ($type::$babyId == 46 && $type2::$babyId == 43)) {
+                    $type = "Nidoran";
+                    $type2 = "Nidoran";
                 }
-                else {
-                    $this->addPokemon($type::$babyId, $reserve->getId(), $pokemons[$i]->getNameSpecies());
+                
+                    
+                if(($type === $type2 || $type2 === "Metamorph") && ($sex != $sex2) && ($pokemons[$i]->getFenceId() === $pokemons[$i + 1]->getFenceId()) && ($random === 1) && ($pokemons[$i]->getFenceId() != $reserve->getId())){
+
+                    if ($type === "Nidoran") {
+                        $randomNidoran = rand(0,1);
+                        if ($randomNidoran === 0) {
+                            $type = "NidoranF";
+                        }
+                        else {
+                            $type = "NidoranM";
+                        }
+                    }
+                    
+                    if ($fence->getPopulation() < 6) {
+                        $this->addPokemon($type::$babyId, $pokemons[$i]->getFenceId(), $pokemons[$i]->getNameSpecies());
+                    }
+                    else {
+                        $this->addPokemon($type::$babyId, $reserve->getId(), $pokemons[$i]->getNameSpecies());
+                    }
+                    $i++;
+                    $j++;
                 }
+                $type = $pokemons[$i]->getNameSpecies();
+                $sex = $pokemons[$i]->getSex();
+                
             }
         }
 }

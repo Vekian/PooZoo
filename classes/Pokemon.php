@@ -235,11 +235,15 @@
                 else {
                         $sex = '<i class="fa-solid fa-mars" style="color: #1c71d8;"></i>';
                 }
+                if (($this->getNameSpecies() === "NidoranF") || ($this->getNameSpecies() === "NidoranM")) {
+                        $name = 'Nidoran';
+                }
+                else {$name = $this->getNameSpecies();}
                 
                 echo('<div class="card text-center '. strtolower($this->getFirstType()) .'" style="width: 14rem;">
                 <img src="' . $this->getAvatar() . '" class="col-4 offset-4 imgPokemon" alt="' . $this->getNameSpecies() . '" height="80px">
                 <div class="card-body">
-                <h5 class="card-title">' . $this->getNameSpecies() . ' ' . $sex . '</h5>
+                <h5 class="card-title">' . $name . ' ' . $sex . '</h5>
 
                 <nav class="my-3">
                         <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
@@ -308,7 +312,7 @@
                                 </table>
                         </div>
                         <div class="tab-pane fade" id="nav-moves'. $this->getId() .'" role="tabpanel" aria-labelledby="nav-moves-tab">
-                                <button type="button" id="movePokemon'. $this->getId().'" class="comic-button  mt-2" data-bs-toggle="modal" data-bs-target="#moveModal'. $this->getId().'">
+                                <button id="myBtn' . $this->getId() .'" class="comic-button  mt-2">
                                         Déplacer le pokemon : -5 <img src="images/pokedollar.png" height="20px" />
                                 </button>
                         </div>
@@ -316,33 +320,28 @@
                 </div>');
                 echo('</div>');
 
-
-
-        echo('  <div class="modal fade" id="moveModal'. $this->getId().'" tabindex="-1" aria-labelledby="moveModalLabel'. $this->getId().'" aria-hidden="true">
-                        <div class="modal-dialog">
-                                <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="moveModalLabel'. $this->getId().'">Déplacer un pokemon de l\'enclos</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                                <form action="process/movePokemonFromFence.php" method="POST" class="text-center m-4">
-                                                        <input type="hidden" value="' . $fenceId . '" name="fenceId">
-                                                        <input type="hidden" value="'. $this->getId() .'" name="pokemonId">
-                                                        <label for="newFence" class="mt-1">Choisissez un enclos </label>
-                                                        <select name="newFenceId" id="newFence" required>');
-                                                        echo('<option value="" selected disabled hidden>Choisir</option>');
-                                                        foreach($fences as $fence) {
-                                                                echo('<option value="'. $fence->getId() . '">' . $fence->getName() . '</option>');
-                                                                };
-                                        echo('          </select>
-                                                        <input type="submit" value="Déplacer vers l\'enclos" class="comic-button">
-                                                </form>
-                                        </div>
-                                </div>
+        echo('<div id="myModal'. $this->getid() .'" class="modalPerso">
+                <div class="modal-contentPerso ">
+                        <div class="modal-headerPerso">
+                                <span class="closePerso">&times;</span>
+                                <h2>Déplacer un pokemon</h2>
                         </div>
-                </div>');
+                        <form action="process/movePokemonFromFence.php" method="POST" class="text-center m-4">
+                                <input type="hidden" value="' . $fenceId . '" name="fenceId">
+                                <input type="hidden" value="'. $this->getId() .'" name="pokemonId">
+                                <label for="newFence" class="mt-1">Choisissez un enclos </label>
+                                <select name="newFenceId" id="newFence" required>');
+                                echo('<option value="" selected disabled hidden>Choisir</option>');
+                                foreach($fences as $fence) {
+                                        echo('<option value="'. $fence->getId() . '">' . $fence->getName() . '</option>');
+                                        };
+                echo('          </select>
+                                <input type="submit" value="Déplacer vers l\'enclos" class="comic-button">
+                        </form>
+                </div>
+        </div>');
         }
+        
 
         public function showStateOfPokemon($fenceId){
                 $state = "";

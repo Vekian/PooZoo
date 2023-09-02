@@ -5,6 +5,11 @@
     }
     $employee = $pokemonZoo->getEmployee();
     $pokemons = $employee->examinePokemons($fenceId);
+    $pokemonsId = [];
+    foreach($pokemons as $pokemon){
+        array_push($pokemonsId, $pokemon->getId());
+    }
+    $jsonPokemonsId = json_encode($pokemonsId);
     $species = $employee->findCompatiblePokemons($fenceId);
     $priceSpecies = [];
     $priceFree= [];
@@ -202,13 +207,40 @@
                 </div>
             </div>
         </div>
+
+
+        
+
+
+
 <script>
+let pokemonsId = <?= $jsonPokemonsId ?>;
+    // Get the modal
+    for(let i = 0; i < pokemonsId.length; i++){
+        let span = document.getElementsByClassName("closePerso")[i];
+
+        document.getElementById("myBtn" + pokemonsId[i]).onclick = function() {
+        document.getElementById("myModal" + pokemonsId[i]).style.display = "block";
+        }
+        span.onclick = function() {
+            document.getElementById("myModal" + pokemonsId[i]).style.display = "none";
+        }
+        window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal" + pokemonsId[i])) {
+            document.getElementById("myModal" + pokemonsId[i]).style.display = "none";
+        }
+
+    }}
+
+
     let image = document.getElementById('img');
     let contentPrice = document.getElementById('priceSpecies');
     let species = <?= $jsonSpecies ?>;
     let priceSpecies = <?= $jsonPriceSpecies ?>;
     let pricesFree = <?= $jsonPriceFree ?>;
     cleanliness = '<?php echo($fence->getCleanliness()); ?>';
+    let populationName = document.getElementById('namePopulation').textContent;
+    console.log( populationName);
 </script>
 <?php
     include_once('footer.php');

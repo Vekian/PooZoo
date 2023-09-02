@@ -6,7 +6,7 @@
     <main class="text-center" id="infosFence">
         <div class="col-8 offset-2 infosZoo mt-3 mb-4">
             <h1>
-                Bienvenue au <?php echo($pokemonZoo->getName()); ?> !
+                Bienvenue au <?php echo(htmlspecialchars($pokemonZoo->getName())); ?> !
             </h1>
             <h2>
                 Il y a <?php  echo($pokemonZoo->numberTotal()); ?> pokemons dans le zoo. (dont <?php echo($fences[0]->getPopulation()) ?> dans la réserve)

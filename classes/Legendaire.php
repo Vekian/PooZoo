@@ -1,6 +1,6 @@
 <?php
     class Legendaire extends Fence {
-        public static $types = [];
+        public static $types = ['Dragon'];
 
         public function __construct (array $data){
             $this->hydrate($data);

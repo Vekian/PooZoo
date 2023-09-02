@@ -27,7 +27,7 @@ selectFree.addEventListener("change", function (e) {
 
 let population = document.getElementById('population').textContent;
 let inputAdd = document.getElementById('addPokemon');
-if (population === ' Population : 6') {
+if ((population === ' Population : 6') && (populationName !== "Reserve")) {
     document.getElementById('population').textContent += ' (max)';
     inputAdd.classList.add('d-none');
 }
