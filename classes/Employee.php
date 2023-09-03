@@ -199,14 +199,14 @@ class Employee {
         <button type="submit" class="button col-12 mt-3"><span>Nettoyer l\'enclos : '. ($priceCleanFence) . ' <img src="images/pokedollar.png" height="20px" /></span></button>
         </form>');
         }
-        echo('<button type="button" id="addPokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-8 mt-3 ms-3');
+        echo('<button type="button" id="addPokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-6 mt-3 ms-3');
         if ($idFence == 1) {
             echo(' d-none');
         }
         echo('" data-bs-toggle="modal" data-bs-target="#addModal"><span>
                         Ajouter un Pokemon</span>
                     </button>
-                    <button type="button" id="removePokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-8 ms-3 mt-3" data-bs-toggle="modal" data-bs-target="#removeModal">
+                    <button type="button" id="removePokemon" class="button col-xl-3 col-lg-5  col-sm-4 col-6 ms-3 mt-3" data-bs-toggle="modal" data-bs-target="#removeModal">
                         <span>Libérer un pokemon</span>
                     </button>
                 </div>

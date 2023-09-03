@@ -43,7 +43,9 @@
 <script>
     let cards = document.getElementsByClassName('card');
     let index = 0;
-    detectWidth(cards);
+    let changed = false;
+    window.onresize = detectWidth(cards);
+
     function detectWidth(cards) {
         if ((window.innerWidth < 900) && (cards.length != 1)){
             let buttonBefore = document.createElement('button');
@@ -94,6 +96,30 @@
         nextCard(cards, 3);
         beforeCard(cards, 3);
         }
+
+        else if ((window.innerWidth >= 1404) && (cards.length > 6)){
+            let buttonBefore = document.createElement('button');
+            buttonBefore.setAttribute('id', 'before');
+            buttonBefore.classList.add('btn', 'mt-5');
+            buttonBefore.innerHTML = "<img src='images/gauche.png' height='50px' />";
+            let parentBefore = document.getElementById('indicatorBefore');
+            parentBefore.appendChild(buttonBefore);
+
+            let buttonNext = document.createElement('button');
+            buttonNext.setAttribute('id', 'next');
+            buttonNext.classList.add('btn', 'ms-3', 'mt-5');
+            buttonNext.innerHTML = "<img src='images/droite.png' height='50px' />";
+            let parentNext = document.getElementById('indicatorNext');
+            parentNext.appendChild(buttonNext);
+            
+            for (let i=0; i < cards.length; i++) {
+            if (i >= 6) {
+                cards[i].classList.add('d-none');
+            }
+            }  
+        nextCard(cards, 6);
+        beforeCard(cards, 6);
+    }
     }
     function nextCard(cards, display) {
     document.getElementById('next').addEventListener('click', function(e){
