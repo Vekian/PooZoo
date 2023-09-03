@@ -386,5 +386,13 @@
                         return 0;
                 }
         }
+
+        public function gameOver() {
+                if ($this->getPokedollars() < 0) {
+                        $this->db->exec('DELETE FROM fences WHERE zoo_id = ' . $this->getId());
+                        $q = $this->db->prepare('UPDATE zoo SET time = 0, pokedollars = 100 WHERE id = ' . $this->getId());
+                        $q->execute(); 
+                }
+        }
 }
 ?>
